@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.web3j.quorum.spring.autoconfigure.Web3jQuorumAutoConfiguration
