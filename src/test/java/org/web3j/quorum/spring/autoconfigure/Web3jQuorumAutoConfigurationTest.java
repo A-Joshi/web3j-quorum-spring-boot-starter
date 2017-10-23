@@ -1,30 +1,26 @@
 package org.web3j.quorum.spring.autoconfigure;
 
 
+import org.junit.After;
+import org.junit.Test;
+import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.web3j.protocol.Service;
+import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.protocol.infura.InfuraHttpService;
+import org.web3j.quorum.Quorum;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.After;
-import org.junit.Test;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
-
-import org.web3j.protocol.Service;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.infura.InfuraHttpService;
-import org.web3j.protocol.parity.Parity;
-
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 public class Web3jQuorumAutoConfigurationTest {
@@ -74,29 +70,6 @@ public class Web3jQuorumAutoConfigurationTest {
         load(EmptyConfiguration.class, "web3j.quorum.client-address=" + path.toString());
     }
 
-
-    @Test
-    public void testAdminClient() throws Exception {
-        load(EmptyConfiguration.class, "web3j.quorum.client-address=", "web3j.quorum.admin-client=true");
-
-        this.context.getBean(Parity.class);
-        try {
-            this.context.getBean(Web3j.class);
-            fail();
-        } catch (NoSuchBeanDefinitionException e) { }
-    }
-
-    @Test
-    public void testNoAdminClient() throws Exception {
-        load(EmptyConfiguration.class, "web3j.quorum.client-address=");
-
-        this.context.getBean(Web3j.class);
-        try {
-            this.context.getBean(Parity.class);
-            fail();
-        } catch (NoSuchBeanDefinitionException e) { }
-    }
-
     private void verifyHttpConnection(
             String clientAddress, Class<? extends Service> cls) throws Exception {
         verifyHttpConnection(clientAddress, clientAddress, cls);
@@ -106,11 +79,11 @@ public class Web3jQuorumAutoConfigurationTest {
             String clientAddress, String expectedClientAddress, Class<? extends Service> cls)
             throws Exception {
         load(EmptyConfiguration.class, "web3j.quorum.client-address=" + clientAddress);
-        Web3j web3j = this.context.getBean(Web3j.class);
+        Quorum quorum = this.context.getBean(Quorum.class);
 
         Field web3jServiceField = JsonRpc2_0Web3j.class.getDeclaredField("web3jService");
         web3jServiceField.setAccessible(true);
-        Web3jService web3jService = (Web3jService) web3jServiceField.get(web3j);
+        Web3jService web3jService = (Web3jService) web3jServiceField.get(quorum);
 
         assertTrue(cls.isInstance(web3jService));
 

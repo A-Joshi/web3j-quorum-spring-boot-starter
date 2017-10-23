@@ -30,7 +30,7 @@ Now Spring can inject web3j quorum instances for you where ever you need them:
 
 ```java
 @Autowired
-private Web3j web3j;
+private Quorum quorum;
 ```
 
 No additional configuration is required if you want to connect via HTTP to the default URL 

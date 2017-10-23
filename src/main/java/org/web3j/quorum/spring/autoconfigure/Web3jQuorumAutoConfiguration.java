@@ -5,24 +5,21 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.infura.InfuraHttpService;
 import org.web3j.protocol.ipc.UnixIpcService;
 import org.web3j.protocol.ipc.WindowsIpcService;
-import org.web3j.protocol.parity.Parity;
+import org.web3j.quorum.Quorum;
 
 /**
  * web3j auto configuration for Spring Boot.
  */
 @Configuration
-@ConditionalOnClass(Web3j.class)
+@ConditionalOnClass(Quorum.class)
 @EnableConfigurationProperties(Web3jQuorumProperties.class)
 public class Web3jQuorumAutoConfiguration {
 
@@ -33,18 +30,10 @@ public class Web3jQuorumAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Web3j web3j() {
+    public Quorum quorum() {
         Web3jService web3jService = buildService(properties.getClientAddress());
         log.info("Building service for endpoint: " + properties.getClientAddress());
-        return Web3j.build(web3jService);
-    }
-
-    @Bean
-    @ConditionalOnProperty(prefix = Web3jQuorumProperties.WEB3J_QUORUM_PREFIX, name = "admin-client", havingValue = "true")
-    public Parity parity() {
-        Web3jService web3jService = buildService(properties.getClientAddress());
-        log.info("Building admin service for endpoint: " + properties.getClientAddress());
-        return Parity.build(web3jService);
+        return Quorum.build(web3jService);
     }
 
     private Web3jService buildService(String clientAddress) {
