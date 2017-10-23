@@ -85,8 +85,8 @@ bintray {
         desc = 'web3j Quorum Spring Boot Starter'
         userOrg = 'web3j'
         licenses = ['Apache-2.0']
-        issueTrackerUrl = 'https://github.com/web3j/web3j-spring-boot-starter/issues'
-        vcsUrl = 'https://github.com/web3j/web3j-spring-boot-starter.git'
+        issueTrackerUrl = 'https://github.com/web3j/web3j-quorum-spring-boot-starter/issues'
+        vcsUrl = 'https://github.com/web3j/web3j-quorum-spring-boot-starter.git'
         websiteUrl = 'https://web3j.io'
         publicDownloadNumbers = true
     }
@@ -121,8 +121,8 @@ uploadArchives {
                 url 'https://web3j.io'
 
                 scm {
-                    connection 'scm:git:https://github.com/web3j/web3j-spring-boot-starter.git'
-                    url 'https://github.com/web3j/web3j-spring-boot-starter.git'
+                    connection 'scm:git:https://github.com/web3j/web3j-quorum-spring-boot-starter.git'
+                    url 'https://github.com/web3j/web3j-quorum-spring-boot-starter.git'
                 }
 
                 licenses {
